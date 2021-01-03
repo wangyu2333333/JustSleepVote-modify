@@ -1,5 +1,7 @@
 package com.justAm0dd3r.jsv.event;
 
+import com.justAm0dd3r.jsv.JustSleepVote;
+import com.justAm0dd3r.jsv.config.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -11,15 +13,22 @@ import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
-    private static final Logger LOGGER = LogManager.getLogger();
+    // Logger
+    private static final Logger LOGGER = LogManager.getLogger(JustSleepVote.MODID);
+
     @SubscribeEvent
     public static void onPlayerSleep(PlayerSleepInBedEvent evt) {
         EntityPlayer player = evt.getEntityPlayer();
         World world = player.getEntityWorld();
+
+        // Client/Server check
+        // -> if on client, the mod will just do nothing
+        if (world.isRemote) return;
+
         int sleepingPlayers = 1;
         sleepingPlayers += world.playerEntities.stream().filter(EntityPlayer::isPlayerSleeping).count();
         int playerCount = world.countEntities(EntityPlayer.class);
-        float percentage = 0.5f;
+        float percentage = Config.percentage;
         int requiredSleepingCount = Math.round(playerCount*percentage);
         if (!player.getEntityWorld().isDaytime()) {
             final TextComponentTranslation message = new TextComponentTranslation(player.getName() + " wants to sleep. (" + sleepingPlayers + "/" + requiredSleepingCount + ")");
@@ -34,4 +43,5 @@ public class EventHandler {
             }
         }
     }
+
 }
