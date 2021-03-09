@@ -1,14 +1,20 @@
 package com.justAm0dd3r.jsv;
 
+import com.justAm0dd3r.jsv.commands.ChangePercentageCommand;
 import com.justAm0dd3r.jsv.config.Config;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
-@Mod(modid = JustSleepVote.MODID, name = JustSleepVote.NAME, version = JustSleepVote.VERSION, acceptableRemoteVersions = "*")
+@Mod(modid = JustSleepVote.MODID,
+        name = JustSleepVote.NAME,
+        version = JustSleepVote.VERSION,
+        acceptableRemoteVersions = "*"
+)
 public class JustSleepVote
 {
     public static final String NAME = "JustSleepVote";
@@ -32,4 +38,8 @@ public class JustSleepVote
         }
     }
 
+    @Mod.EventHandler
+    public static void onServerStart(FMLServerStartingEvent evt) {
+        evt.registerServerCommand(new ChangePercentageCommand());
+    }
 }
