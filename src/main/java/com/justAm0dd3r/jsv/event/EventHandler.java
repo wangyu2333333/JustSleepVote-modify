@@ -20,6 +20,7 @@ public class EventHandler {
     public static void onPlayerSleep(PlayerSleepInBedEvent evt) {
         EntityPlayer player = evt.getEntityPlayer();
         World world = player.getEntityWorld();
+		long time;
 
         // Client/Server check
         // -> if on client, the mod will just do nothing
@@ -39,7 +40,9 @@ public class EventHandler {
                 TextComponentTranslation messageSkipped = new TextComponentTranslation
                         ("Skipping night! (" + sleepingPlayers + "/" + requiredSleepingCount + ")");
                 world.playerEntities.forEach((player1)  -> player1.sendStatusMessage(messageSkipped, true));
-                world.setWorldTime(0);
+				time = world.getWorldTime();
+				time=(time/24000+1)*24000;
+                world.setWorldTime(time);
             }
         }
     }
